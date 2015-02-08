@@ -1,8 +1,8 @@
 import sys
 from Queue import Queue
 from ctypes import POINTER, c_ubyte, c_void_p, c_ulong, cast
-
-# From https://github.com/Valodim/python-pulseaudio
+from requests import get as get_request
+import message_pb2
 from pulseaudio.lib_pulseaudio import *
 
 # edit to match your sink
@@ -122,7 +122,9 @@ def main():
             val = val + (" " * (5 - len(val)))
             spect_string = spect_string  +  val
         print spect_string
+        get_request("192.168.")
+
 
 
 if __name__ == '__main__':
-    main()
+ssss    main()
