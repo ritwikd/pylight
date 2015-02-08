@@ -2,7 +2,6 @@ import sys
 from Queue import Queue
 from ctypes import POINTER, c_ubyte, c_void_p, c_ulong, cast
 from requests import get as get_request
-import message_pb2
 from pulseaudio.lib_pulseaudio import *
 
 # edit to match your sink
@@ -116,15 +115,13 @@ def main():
             except:
                 pass                              
 
-        spect_string = ""
-        for val in spectrum:
-            val = str(val)
-            val = val + (" " * (5 - len(val)))
-            spect_string = spect_string  +  val
-        print spect_string
-        get_request("192.168.")
+        rgb = int((float(sum(spectrum))/400.0)  * 100)
+        rgb = ('#%02x%02x%02x' % (0,0,rgb))[1:]
+        
+        print rgb
+        get_request('http://192.168.1.13:8081/' + rgb)
 
 
 
 if __name__ == '__main__':
-ssss    main()
+    main()
