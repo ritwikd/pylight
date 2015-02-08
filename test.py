@@ -60,7 +60,7 @@ class PulseAudio(object):
         self._api = api
         self._context = context
         self._app_name = app_name
-
+        self._server = None
         self._state_changed = PA_SET_STATE_CALLBACK(self.state_changed)
 
     @property
@@ -95,8 +95,9 @@ class PulseAudio(object):
     def connect(self, server=None, flags=0):
         if server is not None:
             server = c_char_p(server)
-
+        
         pa_context_connect(self.context, server, flags, None)
+        print self.context.server
 
     def state_changed(self, context, userdata):
         """
