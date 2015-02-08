@@ -91,6 +91,8 @@ class PeakMonitor(object):
         data = c_void_p()
         pa_stream_peek(stream, data, c_ulong(length))
         data = cast(data, POINTER(c_ubyte))
+        self.spectrum = []
+        string = ""
         for i in xrange(length):
             # When PA_SAMPLE_U8 is used, samples values range from 128
             # to 255 because the underlying audio data is signed but
@@ -99,13 +101,28 @@ class PeakMonitor(object):
         pa_stream_drop(stream)
 
 def main():
+    audioData = open("audio.txt", "w+")
     monitor = PeakMonitor(SINK_NAME, METER_RATE)
     for sample in monitor:
         sample = sample >> DISPLAY_SCALE
         bar = '>' * sample
         spaces = ' ' * (MAX_SPACES - sample)
-        print ' %3d %s%s\r' % (sample, bar, spaces),
+        #print ' %3d %s%s\r' % (sample, bar, spaces),
         sys.stdout.flush()
+        spectrum = [0] * 6
+        for i in range(6):
+            try:
+                spectrum[i] = (monitor._samples.get(0))
+            except:
+                pass                              
+
+        spect_string = ""
+        for val in spectrum:
+            val = str(val)
+            val = val + (" " * (5 - len(val)))
+            spect_string = spect_string  +  val
+        print spect_string
+
 
 if __name__ == '__main__':
     main()
